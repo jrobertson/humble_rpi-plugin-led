@@ -46,5 +46,9 @@ class HumbleRPiPluginLed
   
   alias on_start start
   
+  def on_exit()
+    @led.on_exit
+  end
+  
   
 end

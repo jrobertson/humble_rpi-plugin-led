@@ -13,7 +13,7 @@ class HumbleRPiPluginLed
     
   end
   
-  def on_led_message(led, message)
+  def on_led_message(message)
             
     r = message.match(/(\d+)\s*(on|off|blink)\s*([\d\.]+)?(?:\s*duration\s)?([\d\.]+)?/)
 
@@ -35,7 +35,7 @@ class HumbleRPiPluginLed
       end
 
       @led[index.to_i].send(*a)
-      
+    end
   end
 
   def start()
