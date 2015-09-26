@@ -9,7 +9,7 @@ class HumbleRPiPluginLed
 
   def initialize(settings: {}, variables: {})
 
-    @pins = settings[:pins]
+    @gpio_pins = settings[:pins]
     
   end
   
@@ -40,7 +40,7 @@ class HumbleRPiPluginLed
 
   def start()
 
-    @led = RPi.new(@pins).led  if @pins.any?    
+    @led = RPi.new(@gpio_pins).pins  if @gpio_pins.any?    
     
   end
   
