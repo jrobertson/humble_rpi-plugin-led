@@ -2,14 +2,23 @@
 
 # file: humble_rpi-plugin-led.rb
 
-require 'rpi'
+require 'rpi_led'
 
 
 class HumbleRPiPluginLed
 
   def initialize(settings: {}, variables: {})
 
-    @gpio_pins = settings[:pins]
+    x = settings[:pins]
+    
+    @gpio_pins = case x
+    when Fixnum
+      [x]
+    when String
+      [x]
+    when Array
+      x
+    end
     
   end
   
@@ -39,8 +48,10 @@ class HumbleRPiPluginLed
   end
 
   def start()
-
-    @led = RPi.new(@gpio_pins).pins  if @gpio_pins.any?    
+    
+    if @gpio_pins.any?  then
+      @led = @gpio_pins.map{|x| RPiLed.new x}
+    end
     
   end
   
