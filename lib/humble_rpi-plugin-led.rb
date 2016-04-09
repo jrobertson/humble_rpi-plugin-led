@@ -2,7 +2,10 @@
 
 # file: humble_rpi-plugin-led.rb
 
-require 'rpi_led'
+#require 'rpi_led'
+require 'requestor'
+
+eval Requestor.read('http://rorbuilder.info/r/ruby'){|x| x.require 'rpi_led'}
 
 
 class HumbleRPiPluginLed
@@ -56,10 +59,6 @@ class HumbleRPiPluginLed
   end
   
   alias on_start start
-  
-  def on_exit()
-    @led.on_exit
-  end
-  
+    
   
 end
