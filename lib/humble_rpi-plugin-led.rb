@@ -17,6 +17,8 @@ class HumbleRPiPluginLed
     @gpio_pins = case x
     when Fixnum
       [x]
+    when Integer
+      [x]      
     when String
       [x]
     when Array
