@@ -29,24 +29,24 @@ class HumbleRPiPluginLed
     # each pin can contain an identifier e.g. pins = [{'4': 'record'}, 17]
     # an LED can be identified by the identifier instead of the numberic index
 
-    pins.each do |x|
-    
-      if x.is_a? Integer then
+    pins.each.with_index do |x, i|
+ 
+      if x.is_a? String or x.is_a? Integer then
 
-        @lookup.merge!(x.to_s.to_sym => x )
-        @gpio_pins << x
+        @lookup.merge!(x.to_s.to_sym => x.to_s )
+        @gpio_pins << x.to_s
 
       elsif x.is_a? Hash
 
         n = x.keys.first.to_s
 
         led_name = x[n.to_sym]
-        @lookup.merge!(n.to_sym => n.to_i )
-        @lookup.merge!(led_name.to_sym => n.to_i )
+        @lookup.merge!(i.to_s.to_sym => i )
+        @lookup.merge!(led_name.to_sym => i )
         @gpio_pins << n.to_i
       end
 
-    end
+    end    
         
   end
   
@@ -71,7 +71,7 @@ class HumbleRPiPluginLed
           [:blink, seconds, duration: duration]
       end
 
-      @led[@lookup[index].to_i].send(*a)
+      @led[@lookup[index.to_sym].to_i].send(*a)
     end
   end
 
