@@ -2,10 +2,8 @@
 
 # file: humble_rpi-plugin-led.rb
 
-#require 'rpi_led'
-require 'requestor'
+require 'rpi_led'
 
-eval Requestor.read('http://rorbuilder.info/r/ruby'){|x| x.require 'rpi_led'}
 
 
 class HumbleRPiPluginLed
@@ -14,7 +12,7 @@ class HumbleRPiPluginLed
 
     x = settings[:pins]
     
-    @gpio_pins = case x
+    pins = case x
     when Fixnum
       [x]
     when Integer
@@ -25,11 +23,36 @@ class HumbleRPiPluginLed
       x
     end
     
+    @lookup = {}
+    @gpio_pins = []
+    
+    # each pin can contain an identifier e.g. pins = [{'4': 'record'}, 17]
+    # an LED can be identified by the identifier instead of the numberic index
+
+    pins.each do |x|
+    
+      if x.is_a? Integer then
+
+        @lookup.merge!(x.to_s.to_sym => x )
+        @gpio_pins << x
+
+      elsif x.is_a? Hash
+
+        n = x.keys.first.to_s
+
+        led_name = x[n.to_sym]
+        @lookup.merge!(n.to_sym => n.to_i )
+        @lookup.merge!(led_name.to_sym => n.to_i )
+        @gpio_pins << n.to_i
+      end
+
+    end
+        
   end
   
   def on_led_message(message)
             
-    r = message.match(/(\d+)\s*(on|off|blink)\s*([\d\.]+)?(?:\s*duration\s)?([\d\.]+)?/)
+    r = message.match(/(\w+)\s*(on|off|blink)\s*([\d\.]+)?(?:\s*duration\s)?([\d\.]+)?/)
 
     if r then
       index, state, seconds, raw_duration = r.captures
@@ -48,7 +71,7 @@ class HumbleRPiPluginLed
           [:blink, seconds, duration: duration]
       end
 
-      @led[index.to_i].send(*a)
+      @led[@lookup[index].to_i].send(*a)
     end
   end
 
