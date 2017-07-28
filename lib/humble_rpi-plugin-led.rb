@@ -45,11 +45,13 @@ class HumbleRPiPluginLed
       
       
       presets = {
+        pink: '#FFC0CB',
         purple: '#800080', 
-        yellow: '#FFFF00',
-        orange: '#FFA500',
         turquoise: '#40E0D0',
-        steelblue: '#4682B4'
+        steelblue: '#4682B4',
+        yellow: '#FFFF00',
+        orange: '#FFA500',        
+        goldenrod: '#DAA520'
       }            
       
       rgb_led = RPiRGB.new(rgb[:pins], presets: presets)
@@ -129,8 +131,8 @@ class HumbleRPiPluginLed
         if  state == 'on' then
           
           a = ((@led.length-1)..@led.length+1).map{|x| x.to_s.to_sym}
-          h = a.zip(%w(red green blue)).to_h
-          #puts 'h: ' + h.inspect
+          h = a.zip(%i(red green blue)).to_h
+
           colour = h[identifier.to_sym]
 
 
@@ -152,7 +154,6 @@ class HumbleRPiPluginLed
   end
 
   def start()
-
     
   end
   
